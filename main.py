@@ -620,14 +620,18 @@ def write_png(path, cv):
 
 def main():
     cv = draw_spread()
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     try:
-        os.makedirs("/output", exist_ok=True)
-        n = write_png("/output/entry.png", cv)
-        print("wrote /output/entry.png", n, "bytes")
+        os.makedirs(out_dir, exist_ok=True)
+        n = write_png(os.path.join(out_dir, "entry.png"), cv)
+        print("wrote", os.path.join(out_dir, "entry.png"), n, "bytes")
     except OSError as e:
-        print("cannot write /output:", e)
-    n = write_png("entry.png", cv)
-    print("wrote ./entry.png", n, "bytes", cv.w, "x", cv.h)
+        print("cannot write", out_dir + ":", e)
+    try:
+        n = write_png("entry.png", cv)
+        print("wrote ./entry.png", n, "bytes", cv.w, "x", cv.h)
+    except OSError as e:
+        print("cannot write ./entry.png:", e)
 
 
 if __name__ == "__main__":
